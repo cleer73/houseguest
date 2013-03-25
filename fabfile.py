@@ -9,7 +9,7 @@ def vagrant():
     env.hosts = ['127.0.0.1:2222']
 
     # Disable cached host keys
-    env.disable_known_hosts = False
+    env.disable_known_hosts = True
 
     # use vagrant ssh key
     env.key_filename = '~/.vagrant.d/insecure_private_key'
