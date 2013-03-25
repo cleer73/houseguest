@@ -1,5 +1,7 @@
-The Bumb
-========
+Houseguest
+==========
+
+Def. (http://en.wiktionary.org/wiki/houseguest)
 
 A vagrant and fabric setup for dynamically creating dev environments.
 
