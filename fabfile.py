@@ -1,7 +1,5 @@
 from fabric.api import *
 
-remove_packages_updated = False
-
 @task
 def vagrant():
     # change from the default user to 'vagrant'
@@ -19,7 +17,7 @@ def vagrant():
 @task
 def lamp(database='mysql', http='nginx', language='php5'):
     # Update our apt repos, they could REALLY old.
-    sudo('apt-get update')
+    system_update()
 
     # Install the Database server
     if database == 'mysql':
@@ -40,12 +38,24 @@ def lamp(database='mysql', http='nginx', language='php5'):
         abort('Developement Language Selected is Unavailable: %s', language)
 
 def mysql():
-    sudo('apt-get install mysql-server')
-    sudo('apt-get install mysql-client')
+    # Set the MySQL root password
+    mysql_password = prompt('MySQL root Password?', default='')
+    sudo('echo "mysql-server-5.5 mysql-server/root_password password %s" | debconf-set-selections' % mysql_password)
+    sudo('echo "mysql-server-5.5 mysql-server/root_password_again password %s" | debconf-set-selections' % mysql_password)
+
+    # Install mysql server & client
+    system_install('mysql-server')
 
 def nginx():
-    sudo('apt-get install nginx')
+    system_install('nginx')
 
 def php5(http):
     if http == 'nginx':
-        sudo('apt-get install php5-fpm')
+        system_install('php5-fpm')
+
+def system_install(*packages):
+    sudo('apt-get -yq install %s' % ' '.join(packages), shell=False)
+
+def system_update():
+    sudo('apt-get -yq update')
+    # sudo('apt-get -yq upgrade')
