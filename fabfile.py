@@ -36,6 +36,23 @@ def lamp(database='mysql', http='nginx', language='php5'):
         php5(http)
     else:
         abort('Developement Language Selected is Unavailable: %s', language)
+@task
+def config(db='mysql', http='nginx', lang='php'):
+    if http == 'nginx' and lang == 'php':
+        sudo('service php5-fpm stop')
+        sudo('service nginx stop')
+
+        put('./configs/nginx.php.conf', '/etc/nginx/sites-available/default', use_sudo=True)
+        sudo('chmod 0644 /etc/nginx/sites-available/default')
+
+        put('./configs/php-fpm.conf', '/etc/php5/fpm/pool.d/www.conf', use_sudo=True)
+        sudo('chmod 0644 /etc/php5/fpm/pool.d/www.conf')
+
+        sudo('service nginx start')
+        run('sudo service php5-fpm start')
+        sudo('service php5-fpm status')
+    else:
+        abort('Unknown configuration (db:%s, http:%s, lang:%s)', db, http, lang)
 
 def mysql():
     # Set the MySQL root password
