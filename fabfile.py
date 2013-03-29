@@ -2,6 +2,9 @@ from fabric.api import *
 
 @task
 def vagrant():
+    local('vagrant destroy')
+    local('vagrant up')
+
     # change from the default user to 'vagrant'
     env.user = 'vagrant'
 
@@ -69,7 +72,7 @@ def nginx():
 
 def php5(http):
     if http == 'nginx':
-        system_install('php5-fpm')
+        system_install('php5-fpm', 'php5-mysql', 'php5-xcache')
 
 def system_install(*packages):
     sudo('apt-get -yq install %s' % ' '.join(packages), shell=False)
