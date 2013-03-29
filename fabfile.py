@@ -15,12 +15,12 @@ def vagrant():
     env.key_filename = '~/.vagrant.d/insecure_private_key'
 
 @task
-def lamp(database='mysql', http='nginx', language='php5'):
+def build(db='mysql', http='nginx', lang='php'):
     # Update our apt repos, they could REALLY old.
     system_update()
 
     # Install the Database server
-    if database == 'mysql':
+    if db == 'mysql':
         mysql()
     else:
         abort('Database Server Selected is Unavailable: %s', database)
@@ -32,10 +32,11 @@ def lamp(database='mysql', http='nginx', language='php5'):
         abort('Http Server Selected is Unavailable: %s', http)
 
     # Install the dev language of choice
-    if language == 'php5':
+    if lang == 'php':
         php5(http)
     else:
-        abort('Developement Language Selected is Unavailable: %s', language)
+        abort('Developement Language Selected is Unavailable: %s', lang)
+
 @task
 def config(db='mysql', http='nginx', lang='php'):
     if http == 'nginx' and lang == 'php':
