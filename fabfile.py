@@ -1,9 +1,9 @@
 from fabric.api import *
 
 @task
-def vagrant():
-    local('vagrant destroy')
-    local('vagrant up')
+def vagrant(boot=True, destroy=False):
+    if destroy: local('vagrant destroy')
+    if boot: local('vagrant up')
 
     # change from the default user to 'vagrant'
     env.user = 'vagrant'
