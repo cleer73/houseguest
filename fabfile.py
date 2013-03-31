@@ -57,7 +57,10 @@ def config(db='mysql', http='nginx', lang='php'):
 
         # Start Services
         sudo('service nginx start')
-        run('sudo service php5-fpm start')
+        sudo('service php5-fpm start', pty=False)
+
+        # Show Service Status
+        sudo('service nginx status')
         sudo('service php5-fpm status')
     else:
         abort('Unknown configuration (db:%s, http:%s, lang:%s)', db, http, lang)
