@@ -18,7 +18,7 @@ def vagrant(boot=True, destroy=False):
     env.key_filename = '~/.vagrant.d/insecure_private_key'
 
 @task
-def build(db='mysql', http='nginx', lang='php'):
+def build(db='maria', http='nginx', lang='php'):
     # Update our apt repos, they could REALLY old.
     system_update()
 
@@ -43,7 +43,7 @@ def build(db='mysql', http='nginx', lang='php'):
         abort('Developement Language Selected is Unavailable: %s', lang)
 
 @task
-def config(db='mysql', http='nginx', lang='php'):
+def config(db='maria', http='nginx', lang='php'):
     if http == 'nginx' and lang == 'php':
         # Stop Services
         sudo('service php5-fpm stop')
