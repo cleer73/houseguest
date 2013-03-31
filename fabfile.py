@@ -43,15 +43,19 @@ def build(db='mysql', http='nginx', lang='php'):
 @task
 def config(db='mysql', http='nginx', lang='php'):
     if http == 'nginx' and lang == 'php':
+        # Stop Services
         sudo('service php5-fpm stop')
         sudo('service nginx stop')
 
+        # Upload Nginx conf
         put('./configs/nginx.php.conf', '/etc/nginx/sites-available/default', use_sudo=True)
         sudo('chmod 0644 /etc/nginx/sites-available/default')
 
+        # Upload PHP5-FPM conf
         put('./configs/php-fpm.conf', '/etc/php5/fpm/pool.d/www.conf', use_sudo=True)
         sudo('chmod 0644 /etc/php5/fpm/pool.d/www.conf')
 
+        # Start Services
         sudo('service nginx start')
         run('sudo service php5-fpm start')
         sudo('service php5-fpm status')
