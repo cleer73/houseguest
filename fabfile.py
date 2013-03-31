@@ -25,6 +25,8 @@ def build(db='mysql', http='nginx', lang='php'):
     # Install the Database server
     if db == 'mysql':
         mysql()
+    if db == 'maria':
+        maria()
     else:
         abort('Database Server Selected is Unavailable: %s', database)
 
