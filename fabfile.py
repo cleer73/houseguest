@@ -74,6 +74,19 @@ def mysql():
     # Install mysql server & client
     system_install('mysql-server')
 
+def maria():
+    # Set the MySQL root password
+    mysql_password = prompt('MySQL root Password?', default='')
+    sudo('echo "mysql-server-5.5 mysql-server/root_password password %s" | debconf-set-selections' % mysql_password)
+    sudo('echo "mysql-server-5.5 mysql-server/root_password_again password %s" | debconf-set-selections' % mysql_password)
+
+    system_install('python-software-properties')
+    sudo('apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db')
+    sudo('add-apt-repository \'deb http://ftp.osuosl.org/pub/mariadb/repo/5.5/ubuntu precise main\'')
+
+    system_update();
+    system_install('mariadb-server')
+
 def nginx():
     system_install('nginx')
 
