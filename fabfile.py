@@ -68,19 +68,13 @@ def config(db='maria', http='nginx', lang='php'):
         abort('Unknown configuration (db:%s, http:%s, lang:%s)', db, http, lang)
 
 def mysql():
-    # Set the MySQL root password
-    mysql_password = prompt('MySQL root Password?', default='')
-    sudo('echo "mysql-server-5.5 mysql-server/root_password password %s" | debconf-set-selections' % mysql_password)
-    sudo('echo "mysql-server-5.5 mysql-server/root_password_again password %s" | debconf-set-selections' % mysql_password)
+    system_mysql_password();
 
     # Install mysql server & client
     system_install('mysql-server')
 
 def maria():
-    # Set the MySQL root password
-    mysql_password = prompt('MySQL root Password?', default='')
-    sudo('echo "mysql-server-5.5 mysql-server/root_password password %s" | debconf-set-selections' % mysql_password)
-    sudo('echo "mysql-server-5.5 mysql-server/root_password_again password %s" | debconf-set-selections' % mysql_password)
+    system_mysql_password();
 
     system_install('python-software-properties')
     sudo('apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db')
@@ -102,3 +96,9 @@ def system_install(*packages):
 def system_update():
     sudo('apt-get -yq update')
     # sudo('apt-get -yq upgrade')
+
+def system_mysql_password():
+    # Set the MySQL root password
+    mysql_password = prompt('MySQL root Password?', default='')
+    sudo('echo "mysql-server-5.5 mysql-server/root_password password %s" | debconf-set-selections' % mysql_password)
+    sudo('echo "mysql-server-5.5 mysql-server/root_password_again password %s" | debconf-set-selections' % mysql_password)
